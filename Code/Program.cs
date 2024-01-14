@@ -6,7 +6,10 @@ class Program
     static string STKJsonFileName = @"/home/lada/Desktop/CognitiveScience/Project/Code/ActivityData/DataSTK.json";
     static string GPeJsonFileName = @"/home/lada/Desktop/CognitiveScience/Project/Code/ActivityData/DataGPe.json";
 
-    static int simulationTotalTime = 1000; // [ms]
+    // time values [ms]:
+    static int simulationTotalTimeMs = 1000;
+    static int excludedInitialTimeMs = 100;//500;
+    static int binIntervalMs = 10; 
 
     static void Main(string[] args)
     {
@@ -14,8 +17,12 @@ class Program
         
         NetworkModel networkModel = new NetworkModel(
             parser.ParseActivityData(STKJsonFileName),
-            parser.ParseActivityData(GPeJsonFileName));
+            parser.ParseActivityData(GPeJsonFileName),
+            simulationTotalTimeMs,
+            excludedInitialTimeMs,
+            binIntervalMs);
 
+        // TODO: distribution
         Console.WriteLine("OK");
     }
 }

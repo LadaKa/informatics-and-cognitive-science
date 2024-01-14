@@ -7,10 +7,17 @@ public class NetworkModel
 
     public NetworkModel(
         Activities stkActivities,
-        Activities gpeActivities)
+        Activities gpeActivities,
+        int totalTimeMs,
+        int excludedInitialTimeMs,
+        int binIntervalMs)
         {
-            stkPopulation = new Population(stkActivities);
-            gpePopulation = new Population(gpeActivities);
+            stkPopulation = new Population(
+                stkActivities, totalTimeMs, excludedInitialTimeMs, binIntervalMs);
+
+            gpePopulation = new Population(
+                gpeActivities, totalTimeMs, excludedInitialTimeMs, binIntervalMs);
+
         }
 
 }
