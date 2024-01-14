@@ -6,14 +6,15 @@ public class NestActivityDataParser
 {
     public Activities ParseActivityData(string jsonFileName)
     {
+        Activities activities = null;
+        
         try
         {
             string jsonString = File.ReadAllText(jsonFileName);
-            Activities activities = 
+            activities = 
                 JsonSerializer.Deserialize<Activities>(
                     jsonString, 
                     new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-            Console.WriteLine(activities.nodeIds[0].ToString());
         }
         catch (Exception ex)
         {
@@ -21,5 +22,6 @@ public class NestActivityDataParser
         }
 
         Console.WriteLine($"Parsing of {jsonFileName} done.");
+        return activities;
     }
 }
