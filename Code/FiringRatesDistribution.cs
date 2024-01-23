@@ -16,7 +16,23 @@ public class FiringRatesDistribution
         this.totalTimeMs = totalTimeMs;
     }
 
-    public Dictionary<decimal,decimal>[] GetDistributionsForPopulation(
+    public Dictionary<string, Dictionary<decimal,decimal>[]> GetDistributionsForNetworkModel(NetworkModel model)
+    {
+        Dictionary<string, Dictionary<decimal,decimal>[]> distributions 
+            = new Dictionary<string, Dictionary<decimal,decimal>[]>();
+        
+        distributions.Add(
+            model.stk, 
+            GetDistributionsForPopulation(model.GetPopulationByName(model.stk)));
+
+        distributions.Add(
+            model.gpe, 
+            GetDistributionsForPopulation(model.GetPopulationByName(model.gpe)));
+
+        return distributions;
+    }
+
+    private Dictionary<decimal,decimal>[] GetDistributionsForPopulation(
         Population population)
     {
         int conditionsCount = conditionsStartsMs.Count();
