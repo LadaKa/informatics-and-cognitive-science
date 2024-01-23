@@ -36,7 +36,6 @@ public class Population
         int totalTimeMs,
         int excludedInitialTimeMs)
     {
-        int intervalPerSecond = 1000/spikeTimesBinIntervalMs;
         int binsCount = totalTimeMs/spikeTimesBinIntervalMs;
 
         foreach (Neuron neuron in neurons.Values)
@@ -47,19 +46,38 @@ public class Population
         }
     }
 
-    // The distribution of single cell firing rates 
-    public void ComputeFiringRateDistribution(
+    // Returns dictionary 
+    // that contains firing rate counts for population
+    // over the given simulation period:
+    // 
+    // <firing rate, count of neurons with this firing rate>
+    public Dictionary<decimal,int> ComputeFiringRateCounts(
         int startTimeMs,
         int endTimeMs)
     {
+        Dictionary<decimal,int> firingRateCounts = new Dictionary<decimal,int>();
         foreach (Neuron neuron in neurons.Values)
         {
-            // compute individual firing rates 
-            neuron.ComputeFiringRate(
+            // compute individual firing rate
+            decimal neuronFiringRate = neuron.ComputeFiringRate(
                 startTimeMs, endTimeMs, spikeTimesBinIntervalMs);
+
+            if (!firingRateCounts.ContainsKey(neuronFiringRate))
+            {
+                firingRateCounts.Add(neuronFiringRate, 1);
+            }
+            else
+            {
+                firingRateCounts[neuronFiringRate]++;
+            }
         }
 
-        // TODO: distribution
+        return firingRateCounts;
+    }
+
+    public int GetNeuronsCount()
+    {
+        return neurons.Count;
     }
 
 }

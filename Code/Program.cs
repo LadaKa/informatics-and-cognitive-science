@@ -11,6 +11,9 @@ class Program
     static int excludedInitialTimeMs = 100;//500;
     static int binIntervalMs = 10; 
 
+    //  TODO:
+    // 0, 400, 700, 1000
+
     static void Main(string[] args)
     {
         NestActivityDataParser parser = new NestActivityDataParser();
@@ -22,7 +25,15 @@ class Program
             excludedInitialTimeMs,
             binIntervalMs);
 
+        
+
         // TODO: distribution
+        // the distribution of single cell firing rates separately for each population in all three
+        // conditions
+
+        FiringRatesDistribution firingRatesDistribution 
+            = new FiringRatesDistribution(new int[]{0, 400, 700}, simulationTotalTimeMs);
+
         Console.WriteLine("OK");
     }
 }
