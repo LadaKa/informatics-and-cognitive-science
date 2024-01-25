@@ -4,7 +4,6 @@ public class Neuron
 {
     private List<decimal> spikeTimes = new List<decimal>();
     private int[] spikeTimesBins;
-   
 
     public void AddSpikeTime(decimal spikeTime)
     {
@@ -20,7 +19,7 @@ public class Neuron
         int includedSpikeCount = 0;
         foreach (decimal spikeTime in spikeTimes)
         {
-            int binIndex = ((int)spikeTime)/binIntervalMs;
+            int binIndex = ((int)(spikeTime - 1 - excludedInitialTimeMs))/binIntervalMs;
             spikeTimesBins[binIndex]++;
             includedSpikeCount++;
         }
@@ -28,15 +27,15 @@ public class Neuron
 
     // The ﬁring rate of individual neurons is estimated 
     // as the average spike count 
-    // over the given simulation period
-    // (excluding the ﬁrst 500 ms of initial network transients)
+    // over the given simulation perio
     public decimal ComputeFiringRate(
+        int excludedInitialTimeMs,
         int startTimeMs, 
         int endTimeMs,
         int binIntervalMs)
     {
-        int startBinIndex = startTimeMs/binIntervalMs;
-        int endBinIndex = endTimeMs/binIntervalMs;
+        int startBinIndex = (startTimeMs-excludedInitialTimeMs)/binIntervalMs;
+        int endBinIndex = (endTimeMs-excludedInitialTimeMs)/binIntervalMs;
         int sumFiringRateOfBins = 0;
         for (int binIndex = startBinIndex; binIndex < endBinIndex; binIndex++)
         {
@@ -46,7 +45,6 @@ public class Neuron
         decimal avgFiringRateOfBins = decimal.Divide(sumFiringRateOfBins, endBinIndex-startBinIndex);
         decimal firingRate = avgFiringRateOfBins * (decimal.Divide(1000, binIntervalMs));
         
-        Console.WriteLine("Firing rate: " + firingRate);
         return firingRate;
     }
 

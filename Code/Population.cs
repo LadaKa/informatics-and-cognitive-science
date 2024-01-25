@@ -7,8 +7,8 @@ public class Population
 
     public Population(
         Activities activities, 
-        int totalTimeMs,
         int excludedInitialTimeMs,
+        int totalTimeMs,
         int binIntervalMs)
     {
         // create all neurons
@@ -20,11 +20,15 @@ public class Population
         // asign spike events to neurons
         for (int i = 0; i < activities.events.senders.Count; i++)
         {
-            neurons[activities.events.senders[i]].AddSpikeTime(activities.events.times[i]);
+            decimal eventTime = activities.events.times[i];
+            if (eventTime > excludedInitialTimeMs)
+            {
+                neurons[activities.events.senders[i]].AddSpikeTime(eventTime);
+            }
         }
 
         spikeTimesBinIntervalMs = binIntervalMs;
-        InitNeuronsSpikeTimesBins(totalTimeMs, excludedInitialTimeMs);
+        InitNeuronsSpikeTimesBins(excludedInitialTimeMs, totalTimeMs);
     }
 
 
@@ -33,16 +37,18 @@ public class Population
     // over the full simulation period, 
     // excluding the ﬁrst 500 ms of initial network transients.
     private void InitNeuronsSpikeTimesBins(
-        int totalTimeMs,
-        int excludedInitialTimeMs)
+        int excludedInitialTimeMs,
+        int totalTimeMs)
     {
-        int binsCount = totalTimeMs/spikeTimesBinIntervalMs;
+        int binsCount = (totalTimeMs-excludedInitialTimeMs)/spikeTimesBinIntervalMs;
 
         foreach (Neuron neuron in neurons.Values)
         {
             // compute number of spikes in bins
             neuron.InitSpikeTimesBins(
-                excludedInitialTimeMs, spikeTimesBinIntervalMs, binsCount);
+                excludedInitialTimeMs, 
+                spikeTimesBinIntervalMs, 
+                binsCount);
         }
     }
 
@@ -52,6 +58,7 @@ public class Population
     // 
     // <firing rate, count of neurons with this firing rate>
     public Dictionary<decimal,int> ComputeFiringRateCounts(
+        int excludedInitialTimeMs,
         int startTimeMs,
         int endTimeMs)
     {
@@ -60,7 +67,7 @@ public class Population
         {
             // compute individual firing rate
             decimal neuronFiringRate = neuron.ComputeFiringRate(
-                startTimeMs, endTimeMs, spikeTimesBinIntervalMs);
+                excludedInitialTimeMs, startTimeMs, endTimeMs, spikeTimesBinIntervalMs);
 
             if (!firingRateCounts.ContainsKey(neuronFiringRate))
             {

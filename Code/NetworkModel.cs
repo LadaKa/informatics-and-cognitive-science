@@ -10,17 +10,17 @@ public class NetworkModel
     public NetworkModel(
         Activities stkActivities,
         Activities gpeActivities,
-        int totalTimeMs,
         int excludedInitialTimeMs,
+        int totalTimeMs,
         int binIntervalMs)
         {
             populations.Add(
                 stk, 
-                new Population(stkActivities, totalTimeMs, excludedInitialTimeMs, binIntervalMs));
+                new Population(stkActivities, excludedInitialTimeMs, totalTimeMs, binIntervalMs));
 
             populations.Add(
                 gpe,
-                new Population(gpeActivities, totalTimeMs, excludedInitialTimeMs, binIntervalMs));
+                new Population(gpeActivities, excludedInitialTimeMs, totalTimeMs, binIntervalMs));
         }
 
     public Population GetPopulationByName(string name)

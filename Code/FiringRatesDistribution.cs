@@ -16,36 +16,44 @@ public class FiringRatesDistribution
         this.totalTimeMs = totalTimeMs;
     }
 
-    public Dictionary<string, Dictionary<decimal,decimal>[]> GetDistributionsForNetworkModel(NetworkModel model)
+    public Dictionary<string, Dictionary<decimal,decimal>[]> GetDistributionsForNetworkModel(
+        NetworkModel model, int excludedInitialTimeMs)
     {
         Dictionary<string, Dictionary<decimal,decimal>[]> distributions 
             = new Dictionary<string, Dictionary<decimal,decimal>[]>();
         
         distributions.Add(
             model.stk, 
-            GetDistributionsForPopulation(model.GetPopulationByName(model.stk)));
+            GetDistributionsForPopulation(
+                model.GetPopulationByName(model.stk), excludedInitialTimeMs));
 
         distributions.Add(
             model.gpe, 
-            GetDistributionsForPopulation(model.GetPopulationByName(model.gpe)));
+            GetDistributionsForPopulation(
+                model.GetPopulationByName(model.gpe), excludedInitialTimeMs));
 
         return distributions;
     }
 
     private Dictionary<decimal,decimal>[] GetDistributionsForPopulation(
-        Population population)
+        Population population, int excludedInitialTimeMs)
     {
         int conditionsCount = conditionsStartsMs.Count();
-        Dictionary<decimal, int>[] firingRateCounts = GetFiringRateCountsForPopulation(population);
+        Dictionary<decimal, int>[] firingRateCounts 
+            = GetFiringRateCountsForPopulation(population, excludedInitialTimeMs);
 
         int neuronsCount = population.GetNeuronsCount();
-        Dictionary<decimal, decimal>[] distributions = new Dictionary<decimal, decimal>[conditionsCount];
+        Dictionary<decimal, decimal>[] distributions 
+            = new Dictionary<decimal, decimal>[conditionsCount];
+
         for (int i = 0; i < conditionsCount; i++)
         {
-            Dictionary<decimal, decimal> distribution = distributions[i];
+            distributions[i] = new Dictionary<decimal, decimal>();
             foreach (decimal key in firingRateCounts[i].Keys)
             {
-                distribution.Add(key, decimal.Divide(firingRateCounts[i][key], neuronsCount));
+                distributions[i].Add(
+                    key, 
+                    decimal.Divide(firingRateCounts[i][key], neuronsCount));
             }
         }
 
@@ -53,7 +61,7 @@ public class FiringRatesDistribution
     }
 
     private Dictionary<decimal,int>[] GetFiringRateCountsForPopulation(
-        Population population)
+        Population population, int excludedInitialTimeMs)
     {
         int conditionsCount = conditionsStartsMs.Count();
         Dictionary<decimal, int>[] firingRateCounts = new Dictionary<decimal, int>[conditionsCount];
@@ -62,11 +70,13 @@ public class FiringRatesDistribution
         {
             int startMs = conditionsStartsMs[i];
             int endMs = conditionsStartsMs[i+1];
-            firingRateCounts[i] = population.ComputeFiringRateCounts(startMs, endMs);
+            firingRateCounts[i] = population.ComputeFiringRateCounts(
+                excludedInitialTimeMs, startMs, endMs);
         }
 
         firingRateCounts[conditionsCount-1] 
-            = population.ComputeFiringRateCounts(conditionsStartsMs[conditionsCount-1], totalTimeMs);
+            = population.ComputeFiringRateCounts(
+                excludedInitialTimeMs, conditionsStartsMs[conditionsCount-1], totalTimeMs);
 
         return firingRateCounts;
     }
