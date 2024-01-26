@@ -3,7 +3,7 @@
 //  .NET SDK fix: sudo ln -s /snap/dotnet-sdk/current/dotnet /usr/local/bin/dotnet
 class Program
 {
-    static string STKJsonFileName = @"/home/lada/Desktop/CognitiveScience/Project/Code/ActivityData/DataSTK.json";
+    static string STNJsonFileName = @"/home/lada/Desktop/CognitiveScience/Project/Code/ActivityData/DataSTN.json";
     static string GPeJsonFileName = @"/home/lada/Desktop/CognitiveScience/Project/Code/ActivityData/DataGPe.json";
 
     // time values [ms]:
@@ -13,8 +13,8 @@ class Program
 
     //  TODO: What are correct start times? Should be DC start after 500 ms?
 
-    //  Poisson generator 1 (STK, GPe):   0 - 1000   
-    //  Direct current (STK):           600 - 1000
+    //  Poisson generator 1 (STN, GPe):   0 - 1000   
+    //  Direct current (STN):           600 - 1000
     //  Poisson generator 2 (GPe):      800 - 1000
 
     //  Excluded Initial Time:          500
@@ -26,7 +26,7 @@ class Program
         
         // network model
         NetworkModel networkModel = new NetworkModel(
-            parser.ParseActivityData(STKJsonFileName),
+            parser.ParseActivityData(STNJsonFileName),
             parser.ParseActivityData(GPeJsonFileName),
             excludedInitialTimeMs,
             simulationTotalTimeMs,

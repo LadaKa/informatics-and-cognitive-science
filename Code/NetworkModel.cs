@@ -3,20 +3,20 @@ namespace Code;
 public class NetworkModel
 {
     private Dictionary<string, Population> populations = new Dictionary<string, Population>();
-    public readonly string stk = "STK";
+    public readonly string stn = "STN";
     public readonly string gpe = "GPe";
 
 
     public NetworkModel(
-        Activities stkActivities,
+        Activities stnActivities,
         Activities gpeActivities,
         int excludedInitialTimeMs,
         int totalTimeMs,
         int binIntervalMs)
         {
             populations.Add(
-                stk, 
-                new Population(stkActivities, excludedInitialTimeMs, totalTimeMs, binIntervalMs));
+                stn, 
+                new Population(stnActivities, excludedInitialTimeMs, totalTimeMs, binIntervalMs));
 
             populations.Add(
                 gpe,

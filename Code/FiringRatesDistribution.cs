@@ -23,9 +23,9 @@ public class FiringRatesDistribution
             = new Dictionary<string, Dictionary<decimal,decimal>[]>();
         
         distributions.Add(
-            model.stk, 
+            model.stn, 
             GetDistributionsForPopulation(
-                model.GetPopulationByName(model.stk), excludedInitialTimeMs));
+                model.GetPopulationByName(model.stn), excludedInitialTimeMs));
 
         distributions.Add(
             model.gpe, 
