@@ -4,9 +4,9 @@ using System.Text.Json;
 
 public class NestActivityDataParser
 {
-    public Activities ParseActivityData(string jsonFileName)
+    public Activities? ParseActivityData(string jsonFileName)
     {
-        Activities activities = null;
+        Activities? activities = null;
         
         try
         {
@@ -19,6 +19,7 @@ public class NestActivityDataParser
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
+            return null;
         }
 
         Console.WriteLine($"Parsing of {jsonFileName} done.");

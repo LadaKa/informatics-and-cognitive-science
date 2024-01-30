@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace Code;
 
 //  The distribution of single cell firing rates 
@@ -81,7 +83,32 @@ public class FiringRatesDistribution
         return firingRateCounts;
     }
 
+    public void WriteDistributionValuesToFile(
+        Dictionary<string, Dictionary<decimal,decimal>[]> distributions)
+    {
+        string txt = ".txt";
+        
+        foreach (KeyValuePair<string, Dictionary<decimal,decimal>[]> populationDistributions in distributions)
+        {
+            // "STK.txt", "GPE.txt"
+            StreamWriter w = new StreamWriter(populationDistributions.Key + txt);
+    
+            string xValuesLine = String.Empty;
+            string yValuesLine = String.Empty;
 
+            foreach (var distr in populationDistributions.Value)
+            {
+                Console.WriteLine(populationDistributions.Key);
+                xValuesLine = String.Join(",", distr.Keys);
+                yValuesLine = String.Join(",", distr.Values);
 
+                w.WriteLine(xValuesLine);
+                w.WriteLine(yValuesLine);
+            }
+
+            w.Close();
+        }
+        
+    }
     
 }

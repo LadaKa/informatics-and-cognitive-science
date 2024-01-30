@@ -40,7 +40,7 @@ public class Population
         int excludedInitialTimeMs,
         int totalTimeMs)
     {
-        int binsCount = (totalTimeMs-excludedInitialTimeMs)/spikeTimesBinIntervalMs;
+        int binsCount = 1 + (totalTimeMs-excludedInitialTimeMs)/spikeTimesBinIntervalMs;
 
         foreach (Neuron neuron in neurons.Values)
         {

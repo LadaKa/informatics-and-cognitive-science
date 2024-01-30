@@ -20,14 +20,20 @@ public class Neuron
         foreach (decimal spikeTime in spikeTimes)
         {
             int binIndex = ((int)(spikeTime - 1 - excludedInitialTimeMs))/binIntervalMs;
-            spikeTimesBins[binIndex]++;
-            includedSpikeCount++;
+
+            //  spike time < total time 
+            if (binIndex < binsCount)
+            {
+                spikeTimesBins[binIndex]++;
+                includedSpikeCount++;
+            }
+           
         }
     }
 
     // The ﬁring rate of individual neurons is estimated 
     // as the average spike count 
-    // over the given simulation perio
+    // over the given simulation period
     public decimal ComputeFiringRate(
         int excludedInitialTimeMs,
         int startTimeMs, 
@@ -45,6 +51,13 @@ public class Neuron
         decimal avgFiringRateOfBins = decimal.Divide(sumFiringRateOfBins, endBinIndex-startBinIndex);
         decimal firingRate = avgFiringRateOfBins * (decimal.Divide(1000, binIntervalMs));
         
+        if (avgFiringRateOfBins > 0)
+        {
+            Console.WriteLine(avgFiringRateOfBins);
+            Console.WriteLine(firingRate);
+            
+        }
+
         return firingRate;
     }
 
