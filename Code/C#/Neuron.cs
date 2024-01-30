@@ -47,17 +47,8 @@ public class Neuron
         {
             sumFiringRateOfBins = sumFiringRateOfBins + spikeTimesBins[binIndex];
         }
-
-        decimal avgFiringRateOfBins = decimal.Divide(sumFiringRateOfBins, endBinIndex-startBinIndex);
-        decimal firingRate = avgFiringRateOfBins * (decimal.Divide(1000, binIntervalMs));
         
-        if (avgFiringRateOfBins > 0)
-        {
-            Console.WriteLine(avgFiringRateOfBins);
-            Console.WriteLine(firingRate);
-            
-        }
-
+        decimal firingRate = sumFiringRateOfBins * (decimal.Divide(1000, endTimeMs - startTimeMs));
         return firingRate;
     }
 
